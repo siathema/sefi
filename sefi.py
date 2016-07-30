@@ -6,10 +6,8 @@
 
 import sys
 import os
-import smtplib
 import json
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+
 
 def list_diff(list1, list2):
     diff_list = []
@@ -18,14 +16,17 @@ def list_diff(list1, list2):
             diff_list.append(entry)
     return diff_list
 
-if len(sys.argv) != 3:
-    print ("usage: python sefi.py [name@me.domain] [Path to directory]")
+if len(sys.argv) != 2:
+    print ("usage: python sefi.py [Path to directory]")
     sys.exit()
+
+
+
 try:
     file_object = open("sefi_file_directories.json", "r")
 except FileNotFoundError:
     file_object = open("sefi_file_directories.json", "w")
-    json.dump(os.listdir(sys.argv[2]), file_object)
+    json.dump(os.listdir(sys.argv[1]), file_object)
     print("No JSON file found in current directory! Generating one now!")
     file_object.close()
     sys.exit(0)
@@ -36,15 +37,15 @@ file_object.close()
 
 
 
-mDirFiles = os.listdir(sys.argv[2])
-if len(mDirFiles) < 1:
+directory_list = os.listdir(sys.argv[1])
+if len(directory_list) < 1:
     print("No files in directory.");
     sys.exit()
 
-diff_files = list_diff(mDirFiles, file_contents)
+diff_files = list_diff(directory_list, file_contents)
 
 file_object = open("sefi_file_directories.json", "w")
-json.dump(mDirFiles, file_object)
+json.dump(directory_list, file_object)
 file_object.close()
 
 if not diff_files:
@@ -52,33 +53,13 @@ if not diff_files:
     sys.exit(0)
 
 
-mSender = "sender@my.hostname"
-mReceiver = sys.argv[1]
 
 
-mMessage = MIMEMultipart('alternative')
-mMessage['Subject'] = "New Files"
-mMessage['From'] = mSender
-mMessage['To'] = mReceiver
-
-html = """\
-<html>
-  <head>
-  </head>
-  <body>
-    <h1> You have {0} new files in {1}! <h1>
-    <p>
-        the new files are:
-    </p>
-    <ul>""".format(str(len(diff_files)) ,sys.argv[2])
+Message = """You have {0} new files in {1}!
+the new files are:
+""".format(str(len(diff_files)) ,sys.argv[1])
 
 for entry in diff_files:
-    html += "<li>{0}</li>".format(entry)
+    Message += (entry + '\n')
 
-html += "</ul></body></html>"
-
-mMessage.attach(MIMEText(html, 'html'))
-
-
-mServer = smtplib.SMTP('localhost')
-mServer.sendmail(mSender, mReceiver, mMessage.as_string())
+print(Message)
