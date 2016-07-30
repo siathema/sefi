@@ -6,6 +6,16 @@ Then run:
 ```
 git clone https://github.com/siathema/sefi.git
 ```
+change into the sefi project directory:
+```
+cd ./sefi
+```
+
+Now you must change the file permissions to allow you to execute sefi.py:
+```
+chmod a+x ./sefi
+```
+
 Next run sefi with the directory of your choosing to generate a jason file for sefi:
 ```
 ./sefi [Path to directory]
