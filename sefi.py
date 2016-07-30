@@ -51,8 +51,8 @@ if not diff_files:
     print("No new files!")
     sys.exit(0)
 
-mSender = "friendlyrobot6502@gmail.com"
-#mSender = "sender@my.hostname"
+
+mSender = "sender@my.hostname"
 mReceiver = sys.argv[1]
 
 
@@ -80,13 +80,13 @@ html += "</ul></body></html>"
 mMessage.attach(MIMEText(html, 'html'))
 
 
-#mServer = smtplib.SMTP('localhost')
-mServer = smtplib.SMTP('smtp.gmail.com', 587)
+mServer = smtplib.SMTP('localhost')
+
 
 mServer.ehlo()
 mServer.starttls()
 mServer.ehlo()
 
-mServer.login(mSender, "G3N3r4t0R")
+mServer.login(mSender, "")
 
 mServer.sendmail(mSender, mReceiver, mMessage.as_string())
