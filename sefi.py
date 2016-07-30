@@ -81,12 +81,4 @@ mMessage.attach(MIMEText(html, 'html'))
 
 
 mServer = smtplib.SMTP('localhost')
-
-
-mServer.ehlo()
-mServer.starttls()
-mServer.ehlo()
-
-mServer.login(mSender, "")
-
 mServer.sendmail(mSender, mReceiver, mMessage.as_string())
