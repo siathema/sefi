@@ -18,18 +18,18 @@ def list_diff(list1, list2):
 
 if len(sys.argv) != 2:
     print ("usage: python sefi.py [Path to directory]")
-    sys.exit()
+    exit(0)
 
 
 
 try:
     file_object = open("sefi_file_directories.json", "r")
-except FileNotFoundError:
+except IOError:
     file_object = open("sefi_file_directories.json", "w")
     json.dump(os.listdir(sys.argv[1]), file_object)
     print("No JSON file found in current directory! Generating one now!")
     file_object.close()
-    sys.exit(0)
+    exit(0)
 
 
 file_contents = json.load(file_object)
@@ -40,7 +40,7 @@ file_object.close()
 directory_list = os.listdir(sys.argv[1])
 if len(directory_list) < 1:
     print("No files in directory.");
-    sys.exit()
+    exit()
 
 diff_files = list_diff(directory_list, file_contents)
 
@@ -50,7 +50,7 @@ file_object.close()
 
 if not diff_files:
     print("No new files!")
-    sys.exit(0)
+    exit()
 
 
 
